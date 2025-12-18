@@ -10,12 +10,14 @@
     >
       <headerPage />
     </q-header>
-    <q-page-container>
-      <router-view />
+    <q-page-container style="height: 100vh">
+      <div class="h-full">
+        <router-view />
+      </div>
+      <q-footer style="background-color: white">
+        <footerPage />
+      </q-footer>
     </q-page-container>
-    <q-footer style="background-color: white; position: static">
-      <footerPage />
-    </q-footer>
   </q-layout>
 </template>
 

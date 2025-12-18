@@ -8,6 +8,7 @@ import { onError } from '@apollo/client/link/error'
 // ---- Token Helper ----
 const getHeaders = () => {
   const token = localStorage.getItem('token')
+  console.log('token: ', token)
   return token ? { Authorization: `Bearer ${token}` } : {}
 }
 

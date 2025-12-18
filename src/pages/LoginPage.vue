@@ -16,9 +16,12 @@ import { useApolloClient } from '@vue/apollo-composable'
 
 // import router from 'src/router'
 import { useRouter } from 'vue-router'
+import { useUserStore } from 'src/stores/auth'
 const router = useRouter()
 const email = ref('')
 const password = ref('')
+
+const authStore = useUserStore()
 
 const { client } = useApolloClient()
 
@@ -27,6 +30,7 @@ const LOGIN_MUTATION = gql`
     login(email: $email, password: $password) {
       token
       user {
+        username
         email
         id
       }
@@ -44,6 +48,13 @@ const handleLogin = async () => {
     })
 
     if (res.data.login && res.data.login.token) {
+      console.log('user: ', res.data.login.user)
+      const userObj = {
+        username: res.data.login.user.username,
+        email: res.data.login.user.email,
+      }
+      authStore.setUser(userObj)
+      authStore.setToken(res.data.login.token)
       localStorage.setItem('token', res.data.login.token)
       console.log('Login Done.')
       router.push('/')

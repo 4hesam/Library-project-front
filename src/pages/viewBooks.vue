@@ -17,6 +17,7 @@
         <div class="text-center q-mt-sm">{{ book.name }}</div>
         <div class="text-center q-mt-sm">{{ book.author.name }}</div>
         <div class="text-center q-mt-sm">{{ book.inventory }}</div>
+        <CusBtn class="Barrow-Book" color="blue" label="Barrow Book" />
       </div>
     </div>
     <div class="q-pa-lg flex flex-center">
@@ -26,6 +27,7 @@
 </template>
 
 <script setup>
+import CusBtn from 'src/components/molecules/CustomButton.vue'
 import { ref, computed, watch } from 'vue'
 import { useQuery } from '@vue/apollo-composable'
 import { gql } from 'graphql-tag'
@@ -73,7 +75,7 @@ watch(searchHandel, (val) => {
   clearTimeout(searchTimer)
   searchTimer = setTimeout(() => {
     debouncedSearch.value = val.trim()
-    current.value = 1 // ریست صفحه
+    current.value = 1
   }, 500)
 })
 </script>
@@ -130,5 +132,14 @@ watch(searchHandel, (val) => {
   padding: 10px;
   border-radius: 15px;
   font-size: 18px;
+}
+.book-img {
+  height: 200px;
+  width: 150px;
+  border-radius: 10px;
+}
+.Barrow-Book {
+  width: 100%;
+  margin-top: auto;
 }
 </style>

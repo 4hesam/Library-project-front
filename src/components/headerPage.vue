@@ -20,7 +20,12 @@
     </div>
     <div class="btn-head">
       <CusButton outline color="LightGray	" icon="shopping_cart" class="shop-ico" />
-      <CusButton color="red" label="Login" class="log-ico" @click="LoginPage" />
+      <CusButton color="red" label="Login" v-if="!isLoggedIn" class="log-ico" @click="LoginPage" />
+      <q-btn round color="white" v-else @click="Dashboard">
+        <q-avatar size="40px"  >
+          <img src="https://cdn.quasar.dev/logo-v2/svg/logo.svg">
+        </q-avatar>
+      </q-btn>
     </div>
   </div>
 </template>
@@ -30,6 +35,7 @@
 import CusSearchBar from 'src/components/molecules/CustomSearchBar.vue'
 import CusButton from 'src/components/molecules/CustomButton.vue'
 import { useRouter } from 'vue-router'
+import { computed  } from 'vue'
 const router = useRouter()
 
 const GoHome = () => {
@@ -38,9 +44,15 @@ const GoHome = () => {
 const LoginPage = () => {
   router.push('/login')
 }
+const Dashboard = () => {
+  router.push('/dashboard')
+}
 const GoBooks = () => {
   router.push('/books')
 }
+const token = localStorage.getItem('token')
+
+const isLoggedIn = computed(() => !!token)
 </script>
 
 <style scoped>

@@ -14,5 +14,6 @@
   background-color: gainsboro;
   margin: 0;
   margin-top: 10px;
+  width: 100%;
 }
 </style>
