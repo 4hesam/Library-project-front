@@ -3,7 +3,7 @@
     <Sidebar @change-active="onChangeActive" />
 
     <div class="box-edit" v-show="active === 1">dashboard</div>
-    <div class="box-edit" v-show="active === 2">bookBorrow</div>
+    <div class="box-edit" v-show="active === 2"><bookBorrow /></div>
     <div class="box-edit" v-show="active === 3">
       <div>
         <div class="info-box">
@@ -24,6 +24,7 @@
 <script setup>
 import { ref } from 'vue'
 import Sidebar from '/src/components/sideBarPage.vue'
+import BookBorrow from '/src/components/userBorrowBook.vue'
 const active = ref(3)
 
 const onChangeActive = (val) => {
