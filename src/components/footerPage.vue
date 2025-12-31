@@ -6,7 +6,7 @@
 
 <script></script>
 
-<style>
+<style scoped>
 .text-copyright {
   text-align: center;
   font-size: 14px;

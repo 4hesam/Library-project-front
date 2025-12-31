@@ -48,7 +48,7 @@ const handleLogin = async () => {
     })
 
     if (res.data.login && res.data.login.token) {
-      console.log('user: ', res.data.login.user)
+      // console.log('user: ', res.data.login.user)
       const userObj = {
         username: res.data.login.user.username,
         email: res.data.login.user.email,

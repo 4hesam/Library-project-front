@@ -9,6 +9,7 @@ const USER_INFO = gql`
       id
       username
       email
+      role
     }
   }
 `
@@ -20,6 +21,7 @@ export const useUserStore = defineStore('user', () => {
   const isAuthenticated = computed(() => !!user.value.id)
 
   function setUser(newUser) {
+    localStorage.setItem('user', JSON.stringify(newUser))
     user.value = newUser
   }
 
@@ -33,6 +35,7 @@ export const useUserStore = defineStore('user', () => {
         fetchPolicy: 'no-cache',
       })
       if (data?.me) {
+        localStorage.setItem('user', JSON.stringify(data.me))
         user.value = data.me
       } else {
         localStorage.removeItem('token')

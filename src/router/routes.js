@@ -17,10 +17,22 @@ const routes = [
         meta: { requiresAuth: false },
       },
       {
+        path: '/authors',
+        name: 'Authors',
+        component: () => import('pages/viewAuthors.vue'),
+        meta: { requiresAuth: false },
+      },
+      {
         path: '/dashboard',
         name: 'Dashboard',
         component: () => import('pages/ProfilePage.vue'),
-        meta: {  requiresAuth: true },
+        meta: { requiresAuth: true },
+      },
+      {
+        path: '/admin',
+        name: 'admin',
+        component: () => import('pages/adminPage.vue'),
+        meta: { requiresAuth: true, requiresAdmin: true },
       },
 
       // {

@@ -104,8 +104,7 @@ import { computed, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useUserStore } from 'src/stores/auth'
 import moment from 'jalali-moment'
-import gql from 'graphql-tag'
-import { useApolloClient } from '@vue/apollo-composable'
+import { useBook } from 'src/composables/useBook.js'
 
 const locale = ref('en')
 
@@ -144,53 +143,13 @@ const LoginPage = () => {
   window.location.href = '/login'
 }
 
-const props = defineProps({
+const { book } = defineProps({
   book: {
     type: Object,
     required: true,
   },
 })
-const { client } = useApolloClient()
-
-const BORROW_MUTATION = gql`
-  mutation Borrow($startTime: String!, $endTime: String!, $bookId: ID!) {
-    borrowBook(startTime: $startTime, endTime: $endTime, bookId: $bookId) {
-      id
-      startTime
-      endTime
-      book {
-        id
-        name
-      }
-    }
-  }
-`
-
-const confirmBorrow = async () => {
-  try {
-    const res = await client.mutate({
-      mutation: BORROW_MUTATION,
-      variables: {
-        bookId: props.book.id,
-        startTime: startTime.value,
-        endTime: endTime.value,
-      },
-    })
-
-    const response = res.data.borrowBook
-    console.log('response: ', response)
-
-    if (response.id) {
-      alert('Book borrowed successfully!')
-      showBorrow.value = false
-      return
-    }
-
-    alert('Failed to borrow the book. Please try again.')
-  } catch (err) {
-    console.log('BORROW ERROR:', err)
-  }
-}
+const { confirmBorrow } = useBook(book)
 </script>
 
 <style scoped>

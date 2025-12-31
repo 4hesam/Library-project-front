@@ -57,11 +57,15 @@ const { user } = storeToRefs(useUserStore())
 // const user = computed(() => userStore.user)
 </script>
 
-<style>
+<style scoped>
 .Dashboard {
   display: flex;
+  width: 100%;
+  height: 100%;
+
 }
 .box-edit {
+  display: flex;
   background: rgb(226, 231, 228);
   padding: 10px;
   gap: 5px;
@@ -69,8 +73,12 @@ const { user } = storeToRefs(useUserStore())
   margin-top: 20px;
   border-radius: 10px;
   box-shadow: 2px 2px 4px 1.5px rgb(172, 171, 171);
-  width: 100%;
-  /* height: 100%; */
+    width: 100%;
+  height: 88vh;
+  flex-direction: column;
+
+
+
 }
 .info-box {
   border: 1px solid black;

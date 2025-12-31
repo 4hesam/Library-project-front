@@ -23,58 +23,18 @@
 
 <script setup>
 // import CusBtn from 'src/components/molecules/CustomButton.vue'
-import { ref, computed, watch } from 'vue'
-import { useQuery } from '@vue/apollo-composable'
-import { gql } from 'graphql-tag'
 import searchBar from '../components/molecules/CustomSearchBar.vue'
 import BookCard from '../components/BookCard.vue'
-const model = ref('best selling')
-const searchHandel = ref('')
-const debouncedSearch = ref('')
-let searchTimer = null
+import { useBook } from 'src/composables/useBook.js'
+  const options = ['Price: Low to High', 'Price: High to Low', 'best selling', 'free']
 
-
-const options = ['Price: Low to High', 'Price: High to Low', 'best selling', 'free']
-const current = ref(1)
-const pageSize = 20
-const BooksPagination = gql`
-  query booksPagination($pageOffset: Int!, $pageSize: Int!, $search: String) {
-    booksPagination(pageOffset: $pageOffset, pageSize: $pageSize, search: $search) {
-      books {
-        id
-        name
-        author {
-          name
-        }
-        inventory
-        fileUrl
-      }
-      totalCount
-      totalPages
-    }
-  }
-`
-
-const variables = computed(() => ({
-  pageOffset: current.value,
-  pageSize: pageSize,
-  search: debouncedSearch.value,
-}))
-const { result } = useQuery(BooksPagination, variables, {
-  fetchPolicy: 'network-only',
-})
-const books = computed(() => result.value?.booksPagination.books || [])
-// eslint-disable-next-line no-unused-vars
-const totalCount = computed(() => result.value?.booksPagination.totalCount || 0)
-const totalPages = computed(() => result.value?.booksPagination.totalPages || 0)
-
-watch(searchHandel, (val) => {
-  clearTimeout(searchTimer)
-  searchTimer = setTimeout(() => {
-    debouncedSearch.value = val.trim()
-    current.value = 1
-  }, 500)
-})
+const {
+  model,
+  searchHandel,
+  books,
+  current,
+  totalPages,
+} = useBook()
 </script>
 
 <style scoped lang="scss">

@@ -7,57 +7,37 @@
         <div v-for="book in books" :key="book.id" class="book-card">
           <img :src="book.book.fileUrl" class="book-img" />
           <div class="text-center q-mt-sm">{{ book.name }}</div>
-          <div class="text-center q-mt-sm">
-            {{ moment(book.startTime).format('YYYY-MM-DD') }}
+          <div class="time-class">
+            <div class="strat-class">
+              {{ moment(book.startTime).format('YYYY-MM-DD') }}
+            </div>
+            <div class="end-class">{{ moment(book.endTime).format('YYYY-MM-DD') }}</div>
           </div>
-          <div class="text-center q-mt-sm">{{ moment(book.endTime).format('YYYY-MM-DD') }}</div>
         </div>
       </div>
 
-      <q-btn round dense icon="chevron_right" class="nav-btn right-btn" @click="next" />
+      <q-btn round dense icon="chevron_right" class="nav-btn right-btn" @click="submit" />
     </div>
   </div>
 </template>
 
 <script setup>
-import { gql } from 'graphql-tag'
-import { ref, computed } from 'vue'
-import { useQuery } from '@vue/apollo-composable'
+import { reactive } from 'vue'
 import moment from 'jalali-moment'
+import { useBook } from 'src/composables/useBook'
 
-const index = ref(0)
+const { confirmBorrow } = useBook()
 
-const BORROW_BOOK = gql`
-  query userBorrow {
-    userBorrow {
-      id
-      book {
-        id
-        fileUrl
-        name
-      }
-      startTime
-      endTime
-    }
-  }
-`
+const form = reactive({
+  startTime: '',
+  endTime: '',
+})
 
-const { result } = useQuery(BORROW_BOOK)
-const books = computed(() => result.value?.userBorrow || [])
-
-const next = () => {
-  if (index.value < books.value.length) {
-    index.value++
-  } else {
-    index.value = 0
-  }
-}
-
-const prev = () => {
-  if (index.value > 0) {
-    index.value--
-  } else {
-    index.value = 0
+const submit = async () => {
+  try {
+    await confirmBorrow(form.startTime, form.endTime)
+  } catch (error) {
+    console.error('Error confirming borrow:', error)
   }
 }
 </script>
@@ -105,5 +85,19 @@ const prev = () => {
 .right-btn {
   right: 0;
   margin: 20px;
+}
+.time-class {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 10px;
+  margin-top: 8px;
+}
+.strat-class,
+.end-class {
+  font-size: 14px;
+  color: black;
+  background: #ffffff;
+  padding: 2px;
+  border-radius: 5px;
 }
 </style>

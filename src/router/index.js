@@ -33,16 +33,21 @@ export default defineRouter(function (/* { store, ssrContext } */) {
   })
 
   Router.beforeEach((to, from, next) => {
-    const requiresAuth = to.matched.some((record) => record.meta.requiresAuth)
-    console.log('requiresAuth: ', requiresAuth)
-    const isAuthenticated = !!localStorage.getItem('token') // Example check
-    console.log('isAuthenticated: ', isAuthenticated)
+    const requiresAuth = to.matched.some((r) => r.meta.requiresAuth)
+    const requiresAdmin = to.matched.some((r) => r.meta.requiresAdmin)
 
-    if (requiresAuth && !isAuthenticated) {
-      next({ name: 'LoginPage' })
-    } else {
-      next()
+    const token = localStorage.getItem('token')
+    const user = JSON.parse(localStorage.getItem('user'))
+
+    if (requiresAuth && !token) {
+      return next({ name: 'LoginPage' })
     }
+
+    if (requiresAdmin && user?.role !== 'admin') {
+      return next({ name: 'Home' })
+    }
+
+    next()
   })
 
   return Router

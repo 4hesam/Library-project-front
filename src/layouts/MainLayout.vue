@@ -26,4 +26,4 @@ import headerPage from 'src/components/headerPage.vue'
 import footerPage from 'src/components/footerPage.vue'
 </script>
 
-<style></style>
+<style scoped></style>
