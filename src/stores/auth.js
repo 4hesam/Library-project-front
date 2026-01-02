@@ -28,6 +28,12 @@ export const useUserStore = defineStore('user', () => {
   function setToken(newToken) {
     token.value = newToken
   }
+  const removeToken = () => {
+    token.value = null
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
+    user.value = {}
+  }
   const fetchUser = async () => {
     try {
       const { data } = await apolloClient.query({
@@ -55,5 +61,6 @@ export const useUserStore = defineStore('user', () => {
     setUser,
     setToken,
     fetchUser,
+    removeToken,
   }
 })

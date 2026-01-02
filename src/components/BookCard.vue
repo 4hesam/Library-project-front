@@ -91,7 +91,7 @@
         </div>
         <div class="btn-dig">
           <q-btn flat label="Cancel" color="primary" v-close-popup />
-          <q-btn flat label="Confirm" color="primary" @click="confirmBorrow" />
+          <q-btn flat label="Confirm" color="primary" @click="submit" />
         </div>
       </q-card-actions>
     </q-card>
@@ -143,13 +143,19 @@ const LoginPage = () => {
   window.location.href = '/login'
 }
 
-const { book } = defineProps({
+const props = defineProps({
   book: {
     type: Object,
     required: true,
   },
 })
-const { confirmBorrow } = useBook(book)
+
+const { confirmBorrow } = useBook(props.book)
+
+const submit = async () => {
+  await confirmBorrow(props.book.id, startTime.value, endTime.value)
+  showBorrow.value = false
+}
 </script>
 
 <style scoped>
@@ -163,6 +169,7 @@ const { confirmBorrow } = useBook(book)
   border-radius: 10px;
 }
 .book-card {
+  background-image: url('../assets/background-book.png');
   display: flex;
   flex-direction: column;
   justify-content: flex-start;

@@ -1,14 +1,16 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query {
-    authors {
+  query userBorrow {
+    userBorrow {
       id
-      name
-      books {
+      book {
         id
+        fileUrl
         name
       }
+      startTime
+      endTime
     }
   }
 `

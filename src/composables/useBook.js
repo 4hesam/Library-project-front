@@ -1,10 +1,10 @@
 import { ref, computed, watch } from 'vue'
-import { useQuery } from '@vue/apollo-composable'
+import {  useQuery } from '@vue/apollo-composable'
 import BOOKS_PAGINATION from 'src/apis/booksPagination'
 import { apolloClient } from 'src/boot/graphql'
 import CREATE_BOOK from 'src/apis/createBook'
 import AUTHORS_QUERY from 'src/apis/allAuther'
-import BORROW_MUTATION from 'src/apis/borrowBook'
+import BORROW_MUTATION from 'src/apis/createBorrowBook'
 
 export function useBook() {
   const model = ref('best selling')
@@ -58,11 +58,10 @@ export function useBook() {
   }
 
   const confirmBorrow = async (bookId, startTime, endTime) => {
-    // const showBorrow = ref(false)
     // const { client } = useApolloClient()
 
     try {
-      const response = await apolloClient.mutate({
+      const res = await apolloClient.mutate({
         mutation: BORROW_MUTATION,
         variables: {
           bookId,
@@ -70,18 +69,22 @@ export function useBook() {
           endTime,
         },
       })
-      console.log('BORROW RESPONSE:', response)
 
-      if (response.data.borrowBook.success) {
+      console.log('BORROW RESPONSE:', bookId,startTime,endTime)
+
+      const borrowed = res?.data?.borrowBook
+
+      if (borrowed?.id) {
         alert('Book borrowed successfully!')
-        // showBorrow.value = false
         return
       }
+
       alert('Failed to borrow the book. Please try again.')
     } catch (err) {
-      console.log('BORROW ERROR:', err)
+      console.error('BORROW ERROR:', err)
     }
   }
+
 
   const addButtonModal = ref(false)
 
@@ -114,7 +117,6 @@ export function useBook() {
     totalCount,
     confirmBorrow,
     result,
-
     getAuthors,
     addButtonModal,
     authorOptions,

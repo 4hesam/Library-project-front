@@ -1,37 +1,53 @@
 <template>
   <div class="sidebar">
-    <q-item clickable  v-ripple  @click="setActive(1)">
+    <q-item clickable v-ripple @click="setActive(1)">
       <q-item-section avatar>
-        <q-icon name="dashboard"/>
+        <q-icon name="dashboard" />
       </q-item-section>
-      <q-item-section > Dashboard </q-item-section>
+      <q-item-section> Dashboard </q-item-section>
     </q-item>
-    <q-item clickable  v-ripple @click="setActive(2)">
+    <q-item clickable v-ripple @click="setActive(2)">
       <q-item-section avatar>
         <q-icon name="confirmation_number" />
       </q-item-section>
-      <q-item-section > bookBorrow </q-item-section>
+      <q-item-section> bookBorrow </q-item-section>
     </q-item>
-    <q-item clickable  v-ripple @click="setActive(3)">
+    <q-item clickable v-ripple @click="setActive(3)">
       <q-item-section avatar>
         <q-icon name="account_box" />
       </q-item-section>
-      <q-item-section  > Profile </q-item-section>
+      <q-item-section> Profile </q-item-section>
     </q-item>
-    <q-item clickable  v-ripple  @click="setActive(4)">
+    <q-item clickable v-ripple @click="setActive(4)">
       <q-item-section avatar>
         <q-icon name="edit_attributes" />
       </q-item-section>
-      <q-item-section > enableBorrow </q-item-section>
+      <q-item-section> enableBorrow </q-item-section>
     </q-item>
+    <div class="log-parent">
+      <q-item clickable v-ripple @click="logout" class="logout-btn">
+        <q-item-section> <q-btn label="LogOut" flat color="red" @click="logout" /> </q-item-section>
+      </q-item>
+    </div>
   </div>
 </template>
 
 <script setup>
+import { useRouter } from 'vue-router'
+import { useUserStore } from 'src/stores/auth'
+
+const router = useRouter()
 const emit = defineEmits(['change-active'])
 
 const setActive = (val) => {
   emit('change-active', val)
+}
+const authStore = useUserStore()
+
+const logout = async () => {
+  authStore.removeToken()
+  await router.push('/')
+  router.go(0)
 }
 </script>
 
@@ -44,5 +60,13 @@ const setActive = (val) => {
   margin-top: 20px;
   border-radius: 10px;
   box-shadow: 2px 2px 4px 1.5px rgb(172, 171, 171);
+}
+
+.logout-btn {
+  outline: 1px solid red;
+  border-radius: 10px;
+  margin: 0px;
+  padding: 0px;
+  display: flex;
 }
 </style>

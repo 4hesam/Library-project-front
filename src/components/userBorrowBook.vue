@@ -16,28 +16,35 @@
         </div>
       </div>
 
-      <q-btn round dense icon="chevron_right" class="nav-btn right-btn" @click="submit" />
+      <q-btn round dense icon="chevron_right" class="nav-btn right-btn" @click="next" />
     </div>
   </div>
 </template>
 
 <script setup>
-import { reactive } from 'vue'
+// import { gql } from 'graphql-tag'
+import { ref, computed } from 'vue'
+import { useQuery } from '@vue/apollo-composable'
 import moment from 'jalali-moment'
-import { useBook } from 'src/composables/useBook'
+import BORROW_BOOK from 'src/apis/userBorrowBook'
+const index = ref(0)
 
-const { confirmBorrow } = useBook()
+const { result } = useQuery(BORROW_BOOK)
+const books = computed(() => result.value?.userBorrow || [])
 
-const form = reactive({
-  startTime: '',
-  endTime: '',
-})
+const next = () => {
+  if (index.value < books.value.length) {
+    index.value++
+  } else {
+    index.value = 0
+  }
+}
 
-const submit = async () => {
-  try {
-    await confirmBorrow(form.startTime, form.endTime)
-  } catch (error) {
-    console.error('Error confirming borrow:', error)
+const prev = () => {
+  if (index.value > 0) {
+    index.value--
+  } else {
+    index.value = 0
   }
 }
 </script>
